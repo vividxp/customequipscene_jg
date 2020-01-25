@@ -600,7 +600,7 @@ VividXP.CustomEquipScene.MenuCommandNumItems = Number(
     Window_ActorSelect.prototype.drawItemImage = function(index) {
         var actor = $gameParty.members()[index];
         var rect = this.itemRect(index);
-        var isSelected = actor === this._actor;
+        var isSelected = actor === this._actor || actor === this._tempActor;
         this.changePaintOpacity(isSelected);
         this.drawActorFace(actor, rect.x + 1, rect.y + 1, 96, 96);
         this.changePaintOpacity(true);
