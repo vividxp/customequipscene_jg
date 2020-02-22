@@ -111,9 +111,6 @@
 * @desc What key should activate the bottom menu window. Check Input.keyMapper in rpg_core for options. Default: shift
 * @default shift
 *
-* @param Menu Command Num Items
-* @desc how many menu commands are there in the menu command window. Only applicable if item type is 'icons'. Default: 7
-* @default 7
 */
 
 var VividXP = VividXP || {};
@@ -194,10 +191,6 @@ VividXP.CustomEquipScene.MenuCommandIconFile = String(
 
 VividXP.CustomEquipScene.MenuCommandActivationKey = String(
     VividXP.CustomEquipScene.Parameters["Menu Command Activation Key"]
-);
-
-VividXP.CustomEquipScene.MenuCommandNumItems = Number(
-    VividXP.CustomEquipScene.Parameters["Menu Command Num Items"]
 );
 
 (function() {
@@ -700,11 +693,29 @@ VividXP.CustomEquipScene.MenuCommandNumItems = Number(
         if (this._actor) {
             this.drawItemBackground(index);
             this.drawItemIcon(index);
+            this.drawItemText(index);
         }
     };
 
     Window_LeftEquipSlot.prototype.drawItemBackground = function(index) {
         this.itemRect(index);
+    };
+
+    Window_LeftEquipSlot.prototype.standardFontSize = function() {
+        return 14;
+    };
+
+    Window_LeftEquipSlot.prototype.drawItemText = function(index) {
+        var equippedItem = this._actor.equips()[index];
+        var rect = this.itemRect(index);
+        var slotText = this.slotName(index);
+        var textWidth = this.textWidth(slotText);
+        this.drawText(slotText, rect.x, rect.y-12, rect.width, 'center');
+    };
+
+    Window_LeftEquipSlot.prototype.slotName = function(index) {
+        var slots = this._actor.equipSlots();
+        return this._actor ? $dataSystem.equipTypes[slots[index]] : '';
     };
 
     Window_LeftEquipSlot.prototype.drawItemIcon = function(index) {
@@ -912,6 +923,14 @@ VividXP.CustomEquipScene.MenuCommandNumItems = Number(
 
     };
 
+    Window_RightEquipSlot.prototype.drawItemText = function(index) {
+        var equippedItem = this._actor.equips()[index+4];
+        var rect = this.itemRect(index);
+        var slotText = this.slotName(index+4);
+        var textWidth = this.textWidth(slotText);
+        this.drawText(slotText, rect.x, rect.y-12, rect.width, 'center');
+    };
+
     Window_RightEquipSlot.prototype.isEnabled = function(index) {
         return this._actor ? this._actor.isEquipChangeOk(index+4) : false;
     };
@@ -1070,18 +1089,7 @@ VividXP.CustomEquipScene.MenuCommandNumItems = Number(
     };
 
     Window_CustomMenuCommand.prototype.maxCols = function() {
-        var numCols;
-        switch(VividXP.CustomEquipScene.MenuCommandItemType) {
-            case 'icons':
-                numCols = VividXP.CustomEquipScene.MenuCommandNumItems;
-            break;
-
-            case 'text':
-            default:
-                numCols = 5;
-            break;
-        }
-        return numCols;
+        return this.maxItems();
     };
 
     Window_CustomMenuCommand.prototype.processTouch = function() {
