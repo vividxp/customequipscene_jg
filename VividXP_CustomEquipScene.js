@@ -3,7 +3,7 @@
 //=============================================================================
 
 /*:
-* @plugindesc VividXP: Custom Equip Scene v1.1
+* @plugindesc VividXP: Custom Equip Scene v1.2
 * @author Lene
 *
 * @help This script will replace RPG Maker MV's default Equip Scene with a
@@ -111,6 +111,10 @@
 * @desc What key should activate the bottom menu window. Check Input.keyMapper in rpg_core for options. Default: shift
 * @default shift
 *
+* @param Menu Command Num Items
+* @desc how many menu commands are there in the menu command window. Only applicable if item type is 'icons'. Default: 7
+* @default 7
+*
 */
 
 var VividXP = VividXP || {};
@@ -191,6 +195,10 @@ VividXP.CustomEquipScene.MenuCommandIconFile = String(
 
 VividXP.CustomEquipScene.MenuCommandActivationKey = String(
     VividXP.CustomEquipScene.Parameters["Menu Command Activation Key"]
+);
+
+VividXP.CustomEquipScene.MenuCommandNumItems = Number(
+    VividXP.CustomEquipScene.Parameters["Menu Command Num Items"]
 );
 
 (function() {
