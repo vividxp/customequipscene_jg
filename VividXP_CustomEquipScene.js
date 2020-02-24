@@ -3,7 +3,7 @@
 //=============================================================================
 
 /*:
-* @plugindesc VividXP: Custom Equip Scene v1.2
+* @plugindesc VividXP: Custom Equip Scene v1.3
 * @author Lene
 *
 * @help This script will replace RPG Maker MV's default Equip Scene with a
