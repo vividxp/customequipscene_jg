@@ -1101,12 +1101,33 @@ VividXP.CustomEquipScene.MenuCommandNumItems = Number(
     };
 
     Window_CustomMenuCommand.prototype.processTouch = function() {
-        Window_Selectable.prototype.processTouch.call(this);
-        if (!this.isOpenAndActive() && this.isTouchedInsideFrame()) {
+        if (this.isOpenAndActive()) {
+            if (TouchInput.isTriggered() && this.isTouchedInsideFrame()) {
+                this._touching = true;
+                this.onTouch(true);
+            } else if (TouchInput.isCancelled()) {
+                if (this.isCancelEnabled()) {
+                    this.processCancel();
+                }
+            } else if (!this.isTouchedInsideFrame()){
+                this._touching = false;
+                this.processCancel();
+                TouchInput.clear();
+            }
+            if (this._touching) {
+                if (TouchInput.isPressed()) {
+                    this.onTouch(false);
+                } else {
+                    this._touching = false;
+                }
+            }
+        } else if (!this.isOpenAndActive() && this.isTouchedInsideFrame() && TouchInput.isTriggered()) {
             this._touching = true;
             this.activate();
             this.onTouch(true);
             this.callHandler('activate');
+        } else {
+            this._touching = false;
         }
     };
 
